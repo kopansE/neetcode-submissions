@@ -1,0 +1,35 @@
+class Solution {
+    /**
+     * @param {character[][]} board
+     * @param {string} word
+     * @return {boolean}
+     */
+    exist(board: string[][], word: string): boolean {
+        if(!board || board.length === 0) return false;
+        const ROWS = board.length, COLS = board[0].length;
+
+        const dfs = (r,c,i) : boolean=>{
+            if(i === word.length) return true;
+            if(r<0 || r>=ROWS || c<0 || c>=COLS || board[r][c] !== word[i]) return false;
+
+            board[r][c] = "#";
+
+            const res = dfs(r+1,c,i+1) ||
+                        dfs(r-1,c,i+1) ||
+                        dfs(r,c+1,i+1) ||
+                        dfs(r,c-1,i+1);
+
+            board[r][c]=word[i];
+
+            return res;
+        }
+        
+        let ans = false;
+        for(let r=0; r<ROWS;r++){
+            for(let c=0; c<COLS;c++){
+                ans = ans || dfs(r,c,0);
+            }
+        }
+        return ans;
+    }
+}
